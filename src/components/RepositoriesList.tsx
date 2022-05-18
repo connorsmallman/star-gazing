@@ -4,7 +4,7 @@ import {RepositoryListItem} from "./RepositoriesListItem";
 export type Repository = {
   name: string;
   description: string;
-  stars: string;
+  stars: number;
   id: number;
   url: string;
   isFavorite?: boolean;

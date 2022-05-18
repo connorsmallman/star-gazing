@@ -5,7 +5,7 @@ import { MdFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 interface RepositoryListItemProps {
   name: string;
   description: string;
-  stars: string;
+  stars: number;
   id: number;
   isFavorite: boolean;
   unfavoriteRepository: (id: number) => void;
