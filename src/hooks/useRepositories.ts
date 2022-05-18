@@ -10,14 +10,18 @@ function addFavoritesMiddleware(useSWRNext: (arg0: any, arg1: any, arg2: any) =>
     const repositoriesWithFavorites = swr?.data?.map((r: Record<string, unknown>) => {
       if (cache.get(r.id)) {
         return {
-          ...r,
+          id: r.id,
+          name: r.name,
+          description: r.description,
           url: r.html_url,
           stars: r.stargazers_count,
           isFavorite: true,
         }
       } else {
         return {
-          ...r,
+          id: r.id,
+          name: r.name,
+          description: r.description,
           url: r.html_url,
           stars: r.stargazers_count,
         }
