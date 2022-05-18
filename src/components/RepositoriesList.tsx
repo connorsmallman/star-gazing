@@ -1,5 +1,4 @@
 import React from "react";
-import {useRepositories} from "../hooks/useRepositories";
 import {RepositoryListItem} from "./RepositoriesListItem";
 
 export type Repository = {
@@ -21,22 +20,21 @@ export const RepositoryList = ({ repositories, favoriteRepository, unfavoriteRep
   return (
     <>
       {repositories.map((repository: Repository) => {
-      return (
-      // TODO add link to github
-      <RepositoryListItem
-        key={repository.id}
-        id={repository.id}
-        stars={repository.stars}
-        description={repository.description}
-        name={repository.name}
-        isFavorite={repository.isFavorite || false}
-        handleOnClick={() => {
-          window.location.href = repository.url;
-        }}
-        favoriteRepository={favoriteRepository}
-        unfavoriteRepository={unfavoriteRepository}
-    />
-    );
-  })}
-  </>)
+        return (
+          <RepositoryListItem
+            key={repository.id}
+            id={repository.id}
+            stars={repository.stars}
+            description={repository.description}
+            name={repository.name}
+            isFavorite={repository.isFavorite || false}
+            handleOnClick={() => {
+              window.location.href = repository.url;
+            }}
+            favoriteRepository={favoriteRepository}
+            unfavoriteRepository={unfavoriteRepository}
+          />
+        );
+      })}
+  </>);
 };

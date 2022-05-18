@@ -34,10 +34,10 @@ function App() {
   });
 
   return (
-      <div className="max-w-md mx-auto text-slate-800">
-        <h1 className="p-6 text-center">Star Gazing</h1>
-          <div>
-            Filter By:
+    <div className="max-w-md mx-auto text-slate-800">
+      <h1 className="p-6 text-center">Star Gazing</h1>
+        <div>
+          Filter By:
           <select className="
             block
             w-full
@@ -66,11 +66,11 @@ function App() {
               </option>
               ))}
           </select>
-          </div>
+        </div>
         {isLoading ? (<span className="text-center">loading...</span>) : (
           <RepositoryList repositories={filteredRepositories} favoriteRepository={favoriteRepository} unfavoriteRepository={unfavoriteRepository} />
         )}
-      </div>
+    </div>
   );
 }
 
