@@ -11,10 +11,16 @@ function addFavoritesMiddleware(useSWRNext: (arg0: any, arg1: any, arg2: any) =>
       if (cache.get(r.id)) {
         return {
           ...r,
+          url: r.html_url,
+          stars: r.stargazers_count,
           isFavorite: true,
         }
       } else {
-        return r;
+        return {
+          ...r,
+          url: r.html_url,
+          stars: r.stargazers_count,
+        }
       }
     });
 

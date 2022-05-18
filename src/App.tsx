@@ -1,16 +1,37 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useState } from 'react';
 
-import { RepositoryList } from './components/RepositoriesList';
+import {Repository, RepositoryList} from './components/RepositoriesList';
+import {useRepositories} from "./hooks/useRepositories";
+import cache from "./cache";
 
-const defaultRepositoryFilterOptions = [
-  { label: "None", value: "none", comparison: "none" },
-  { label: "Favorites", value: "favorites", comparison: "isFavorite" },
+const repositoryFilterOptions = [
+  { label: "None", value: "none" },
+  { label: "Favorites", value: "isFavorite" },
 ];
 
 function App() {
-  const [filterOptions, setFilterOptions] = useState(defaultRepositoryFilterOptions);
-  const initialFilterKey = defaultRepositoryFilterOptions[0].value;
+  const initialFilterKey = repositoryFilterOptions[0].value;
   const [filterKey, setFilterKey] = useState(initialFilterKey);
+
+  const { repositories, isLoading, isError, mutate } = useRepositories(7);
+
+  const favoriteRepository = (id: number) => {
+    cache.set(id, true);
+    mutate();
+  }
+
+  const unfavoriteRepository = (id: number) => {
+    cache.delete(id);
+    mutate();
+  }
+
+  const filteredRepositories = repositories?.filter((repository: Repository) => {
+    const filterValue = repositoryFilterOptions.find(f => f.value === filterKey)?.value;
+    if (filterValue === 'isFavorite') {
+      return repository.isFavorite;
+    }
+    return true;
+  });
 
   return (
       <div className="max-w-md mx-auto text-slate-800">
@@ -37,7 +58,7 @@ function App() {
            " onChange={(event) => {
             setFilterKey(event.target.value);
           }}>
-            {filterOptions.map(filterOption => (
+            {repositoryFilterOptions.map(filterOption => (
               <option
                 key={filterOption.label}
                 label={filterOption.label}>
@@ -46,7 +67,9 @@ function App() {
               ))}
           </select>
           </div>
-          <RepositoryList />
+        {isLoading ? (<span className="text-center">loading...</span>) : (
+          <RepositoryList repositories={filteredRepositories} favoriteRepository={favoriteRepository} unfavoriteRepository={unfavoriteRepository} />
+        )}
       </div>
   );
 }

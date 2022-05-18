@@ -1,36 +1,26 @@
 import React from "react";
 import {useRepositories} from "../hooks/useRepositories";
 import {RepositoryListItem} from "./RepositoriesListItem";
-import cache from "../cache";
 
-type Repository = {
+export type Repository = {
   name: string;
   description: string;
   stars: string;
   id: number;
+  url: string;
   isFavorite?: boolean;
 }
 
-const favoriteRepository = (id: number) => {
-  cache.set(id, true);
+type RepositoryListProps = {
+  repositories: Repository[],
+  favoriteRepository: (id: number) => void
+  unfavoriteRepository: (id: number) => void
 }
 
-const unfavoriteRepository = (id: number) => {
-  cache.delete(id);
-}
-
-export const RepositoryList = () => {
-  const { repositories, isLoading, isError, mutate } = useRepositories(7);
-
-  if (isLoading) {
-    return <span>loading</span>
-  }
-
+export const RepositoryList = ({ repositories, favoriteRepository, unfavoriteRepository }: RepositoryListProps) => {
   return (
-    <div>
-      {
-    repositories.map((repository: Repository) => {
-      console.log(repository.isFavorite);
+    <>
+      {repositories.map((repository: Repository) => {
       return (
       // TODO add link to github
       <RepositoryListItem
@@ -40,16 +30,13 @@ export const RepositoryList = () => {
         description={repository.description}
         name={repository.name}
         isFavorite={repository.isFavorite || false}
-        favoriteRepository={async (id) => {
-          favoriteRepository(id);
-          await mutate();
+        handleOnClick={() => {
+          window.location.href = repository.url;
         }}
-        unfavoriteRepository={async (id) => {
-          unfavoriteRepository(id);
-          await mutate();
-        }}
+        favoriteRepository={favoriteRepository}
+        unfavoriteRepository={unfavoriteRepository}
     />
     );
   })}
-  </div>)
+  </>)
 };
